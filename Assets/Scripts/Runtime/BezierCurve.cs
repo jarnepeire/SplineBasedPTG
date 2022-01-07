@@ -20,16 +20,26 @@ public class BezierCurve : MonoBehaviour
 
     [Range(0, 1)]
     [SerializeField]
-    float tValue = 0f;
+    public float tValue = 0f;
 
     [SerializeField]
-    Transform[] _controlPoints = new Transform[4];
+    public Vector3[] ControlPoints = new Vector3[4];
 
     private Vector3 _startOffset;
 
-    Vector3 GetControlPoint(int idx)
+    public void Reset()
     {
-        return _controlPoints[idx].position;
+        ControlPoints = new Vector3[] {
+            new Vector3(1f, 0f, 0f),
+            new Vector3(2f, 0f, 0f),
+            new Vector3(3f, 0f, 0f),
+            new Vector3(4f, 0f, 0f)
+        };
+    }
+
+    public Vector3 GetControlPoint(int idx)
+    {
+        return ControlPoints[idx];
     }
 
    // public BezierCurve(Transform[] controlPoints, Vector3 startOffset)
@@ -49,23 +59,24 @@ public class BezierCurve : MonoBehaviour
    //         _controlPoints[i].parent = this.transform;
    //     }
    // }
-    public void OnDrawGizmos()
-    {
-        for (int i = 0; i < 4; ++i)
-        {
-            Gizmos.DrawSphere(GetControlPoint(i), 0.05f);
-        }
+    //public void OnDrawGizmos()
+    //{
+    //    for (int i = 0; i < 4; ++i)
+    //    {
+    //        Gizmos.DrawSphere(GetControlPoint(i), 0.05f);
+    //    }
 
-        Handles.DrawBezier(GetControlPoint(0), GetControlPoint(3), GetControlPoint(1), GetControlPoint(2), Color.white, EditorGUIUtility.whiteTexture, 1f);
+    //    Handles.DrawBezier(GetControlPoint(0), GetControlPoint(3), GetControlPoint(1), GetControlPoint(2), Color.white, EditorGUIUtility.whiteTexture, 1f);
 
-        Gizmos.color = Color.red;
-        BezierPoint testPoint = GetBezierPoint(tValue);
-        Gizmos.DrawSphere(testPoint.BezierPosition, 0.025f);
-        Gizmos.color = Color.white;
+    //    Gizmos.color = Color.red;
+    //    //BezierPoint testPoint = GetBezierPoint(tValue);
+    //    BezierPoint testPoint = GetBezierPoint_Optimized(tValue);
+    //    Gizmos.DrawSphere(testPoint.BezierPosition, 0.025f);
+    //    Gizmos.color = Color.white;
 
 
-        Handles.PositionHandle(testPoint.BezierPosition, testPoint.BezierRotation);
-    }
+    //    Handles.PositionHandle(testPoint.BezierPosition, testPoint.BezierRotation);
+    //}
 
     BezierPoint GetBezierPoint(float t)
     {
@@ -90,5 +101,87 @@ public class BezierCurve : MonoBehaviour
         Quaternion bezierRot = Quaternion.LookRotation(fwd, Vector3.up);
 
         return new BezierPoint(bezierPosition, bezierRot);
+    }
+
+    public BezierPoint GetBezierPoint_Optimized(float t)
+    {
+        //Gathering each control point
+        Vector3 p0 = GetControlPoint(0);
+        Vector3 p1 = GetControlPoint(1);
+        Vector3 p2 = GetControlPoint(2);
+        Vector3 p3 = GetControlPoint(3);
+
+        //Using the quadratic formula instead of lerps
+        float omt = 1f - t;
+        float omt2 = omt * omt;
+        float t2 = t * t;
+
+        Vector3 bezierPoint = p0 * (omt2 * omt) + 
+                p1 * (3f * omt2 * t) +
+                p2 * (3f * omt * t2) +
+                p3 * (t2 * t);
+
+        Vector3 tangent =
+            p0 * (-omt2) +
+            p1 * (3 * omt2 - 2 * omt) +
+            p2 * (-3 * t2 + 2 * t) +
+            p3 * (t2);
+        tangent.Normalize();
+
+        
+        Vector3 binormal = Vector3.Cross(Vector3.up, tangent).normalized;
+        Vector3 normal = Vector3.Cross(tangent, binormal);
+        Quaternion bezierRotation = Quaternion.LookRotation(tangent, normal);
+
+        return new BezierPoint(bezierPoint, bezierRotation);
+
+    }
+
+    public Vector3 GetPoint(float t)
+    {
+        //Gathering each control point
+        Vector3 p0 = GetControlPoint(0);
+        Vector3 p1 = GetControlPoint(1);
+        Vector3 p2 = GetControlPoint(2);
+        Vector3 p3 = GetControlPoint(3);
+
+        //Using the quadratic formula instead of lerps
+        float omt = 1f - t;
+        float omt2 = omt * omt;
+        float t2 = t * t;
+
+        Vector3 bezierPoint = p0 * (omt2 * omt) +
+                p1 * (3f * omt2 * t) +
+                p2 * (3f * omt * t2) +
+                p3 * (t2 * t);
+        return bezierPoint;
+    }
+
+    public Vector3 GetDirection(float t)
+    {
+        return GetVelocity(t).normalized;
+    }
+
+    public Vector3 GetVelocity(float t)
+    {
+        return transform.TransformPoint(GetFirstDerivative(t)) - transform.position;
+    }
+
+    public Vector3 GetFirstDerivative(float t)
+    {
+        //Gathering each control point
+        Vector3 p0 = GetControlPoint(0);
+        Vector3 p1 = GetControlPoint(1);
+        Vector3 p2 = GetControlPoint(2);
+        Vector3 p3 = GetControlPoint(3);
+
+        float omt = 1f - t;
+        float omt2 = omt * omt;
+        float t2 = t * t;
+
+        return
+            3f * omt2 * (p1 - p0) +
+            6f * omt * t * (p2 - p1) +
+            3f * t2 * (p3 - p2);
     }
 }
