@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* This class is NOT finished and is meant to be an extension of combining bezier curves */
 public class BezierSpline : MonoBehaviour
 {
     public Transform[] allControlPoints = new Transform[4];

@@ -66,9 +66,9 @@ public class Quad : MonoBehaviour
         //Set mesh information
         mesh.Clear();
         mesh.SetVertices(vertexPoints);
-       // mesh.SetNormals(normals);
-        //mesh.SetUVs(0, uvs);
-       // mesh.triangles = triangleIndices;
+        mesh.SetNormals(normals);
+        mesh.SetUVs(0, uvs);
+        mesh.triangles = triangleIndices;
         mesh.SetTriangles(triangleIndices, 0);
     }
 }
