@@ -32,12 +32,22 @@ public class BezierCurveInspector : Editor
             }
          }
     }
+
     private void OnEnable()
     {
         if (!sceneIsAdded)
         {
             SceneView.duringSceneGui += CustomOnSceneGUI;
             sceneIsAdded = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (sceneIsAdded)
+        {
+            SceneView.duringSceneGui -= CustomOnSceneGUI;
+            sceneIsAdded = false;
         }
     }
 

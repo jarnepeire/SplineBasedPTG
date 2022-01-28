@@ -19,7 +19,7 @@ public class Mesh2D : ScriptableObject
 
     public float CalculateUSpan()
     {
-        //the total length of U coordinates spanning across 
+        //the total length of each point in the mesh
         float dist = 0;
         for (int i = 0; i < lineIndices.Length; i+=2)
         {

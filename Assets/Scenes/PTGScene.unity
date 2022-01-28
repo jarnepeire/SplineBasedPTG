@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _curve: {fileID: 1806604703}
-  IterationCount: 8
+  IterationCount: 24
   Shape2D: {fileID: 11400000, guid: 9ee827335993aa04587b6c6e68ee7058, type: 2}
 --- !u!1 &536967128
 GameObject:
@@ -331,10 +331,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _curve: {fileID: 1806604703}
-  Amount: 4
+  Amount: 8
   _placementMesh: {fileID: 82169777}
   LocalOffset: {x: 0, y: 0, z: -4.5}
-  _skipEdgingMeshes: 0
+  _skipEdgingMeshes: 1
 --- !u!4 &536967130
 Transform:
   m_ObjectHideFlags: 0
@@ -558,7 +558,7 @@ MonoBehaviour:
   Amount: 4
   _placementMesh: {fileID: 82169777}
   LocalOffset: {x: 0, y: 0, z: 4.5}
-  _skipEdgingMeshes: 0
+  _skipEdgingMeshes: 1
 --- !u!4 &1384108945
 Transform:
   m_ObjectHideFlags: 0
@@ -604,10 +604,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tValue: 0.483
   ControlPoints:
-  - {x: -23.801605, y: 0.2826339, z: 0}
-  - {x: -15.331621, y: 8.586239, z: 0.023480415}
-  - {x: -2.4750986, y: 7.1740284, z: 0.10243416}
-  - {x: 10.651804, y: 0, z: 0}
+  - {x: -44.128437, y: 0.2826339, z: -1.4422498}
+  - {x: -6.211404, y: -34.144344, z: 2.7484078}
+  - {x: 16.791939, y: 22.943752, z: 3.558949}
+  - {x: 73.33356, y: -7.965787, z: 3.051989}
 --- !u!4 &1806604704
 Transform:
   m_ObjectHideFlags: 0
@@ -616,7 +616,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806604702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10.54, y: 0, z: -2.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
